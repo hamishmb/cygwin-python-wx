@@ -1,0 +1,87 @@
+WX_VERSION=${PV%.*.*}
+WX_TOOLKIT="gtk3"
+inherit python2-distutils wxwidgets
+
+NAME="python-wx"
+VERSION=3.0.2.0
+RELEASE=4
+CATEGORY="Python"
+SUMMARY="wxWidgets C++ application framework (Python bindings)"
+DESCRIPTION="wxWidgets is a set of libraries that allows C++ applications to
+compile and run on several different types of computer, with minimal source
+code changes. There is one library per supported GUI. As well as providing a
+common API for GUI functionality, it provides functionality for accessing some
+commonly-used operating system facilities, from copying and deleting files to
+socket and thread support."
+HOMEPAGE="http://wxwidgets.org/"
+SRC_URI="mirror://sourceforge/wxpython/wxPython-src-${VERSION}.tar.bz2"
+SRC_DIR="wxPython-src-${VERSION}/wxPython"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/fix-editra-removal.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.0.0-format.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-getxwindowcrash.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-plot.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-listctrl-mixin-edit.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-webview-optional.patch
+	3.0.2-python-build.patch
+"
+
+DISTCLEANFILES="build_options.py"
+
+PKG_NAMES="python2-wx python2-wxversion python-wx-devel"
+python2_wx_OBSOLETES="python-wx3.0 python-wx-tools"
+python2_wx_REQUIRES="python2-wxversion"
+python2_wx_CONTENTS="
+	etc/
+	usr/bin/helpviewer
+	usr/bin/img2*
+	usr/bin/py*
+	usr/bin/xrced
+	${PYTHON2_SITELIB#/}/wx-${WX_VERSION}-${WX_TOOLKIT}/
+	${PYTHON2_SITELIB#/}/wxPython_common-${VERSION}-*.egg-info
+	usr/share/applications/
+	usr/share/icons/
+"
+python2_wxversion_OBSOLETES="python-wxversion"
+python2_wxversion_CONTENTS="
+	${PYTHON2_SITELIB#/}/wx.pth
+	${PYTHON2_SITELIB#/}/wxversion.*
+"
+python_wx_devel_REQUIRES="libwx_${WX_TOOLKIT}u${WX_VERSION}-devel"
+python_wx_devel_CONTENTS="
+	usr/include/wx-${WX_VERSION}/wx/wxPython/
+"
+
+DIFF_EXCLUDES="swigver.h wx.pth *_wrap.cpp"
+
+CFLAGS+=" -fno-strict-aliasing"
+CXXFLAGS+=" -fno-strict-aliasing"
+
+src_compile() {
+	lndirs
+	cd ${B}
+
+	export WXWIN=${S}/..
+
+	python2_distutils_compile WXPORT=${WX_TOOLKIT} WX_CONFIG=${WX_CONFIG}
+}
+
+src_install() {
+	cd ${B}
+
+	export WXWIN=${S}/..
+
+	python2_distutils_install WXPORT=${WX_TOOLKIT} WX_CONFIG=${WX_CONFIG}
+
+	for i in 16 32
+	do
+		insinto /usr/share/icons/hicolor/${i}x${i}/apps
+		newins ${S}/wx/py/PyCrust_${i}.png PyCrust.png
+		newins ${S}/wx/tools/XRCed/XRCed_${i}.png XRCed.png
+	done
+	make_desktop_entry pyalacarte PyAlaCarte  PyCrust "Development;GTK"
+	make_desktop_entry pyalamode  PyAlaMode   PyCrust "Development;GTK"
+	make_desktop_entry pycrust    PyCrust     PyCrust "Development;GTK"
+	make_desktop_entry pyshell    PyShell     PyCrust "Development;GTK"
+	make_desktop_entry xrced      XRCed       XRCed   "Development;GTK"
+}
