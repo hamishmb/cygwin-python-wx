@@ -1,0 +1,70 @@
+From 31f1eb9ef2b4b2d12e6c6ddc5af9888fae1857ee Mon Sep 17 00:00:00 2001
+From: Scott Talbert <swt@techie.net>
+Date: Fri, 15 Dec 2017 22:13:54 -0500
+Subject: [PATCH] Add wxcairo support for pycairo 1.11.1+
+Origin: https://github.com/wxWidgets/wxPython/pull/23
+
+---
+ wxPython/wx/lib/wxcairo.py | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/wxPython/wx/lib/wxcairo.py b/wx/lib/wxcairo.py
+index 48e2ed62a1..ddb55cde6a 100644
+--- a/wxPython/wx/lib/wxcairo.py
++++ b/wxPython/wx/lib/wxcairo.py
+@@ -465,6 +465,52 @@ class Pycairo_CAPI(ctypes.Structure):
+                                                       ctypes.py_object)),
+             ('Check_Status', ctypes.PYFUNCTYPE(ctypes.c_int, ctypes.c_int))]
+ 
++    # This structure is known good with pycairo 1.11.1+.
++    else:
++        _fields_ = [
++            ('Context_Type', ctypes.py_object),
++            ('Context_FromContext', ctypes.PYFUNCTYPE(ctypes.py_object,
++                                                      ctypes.c_void_p,
++                                                      ctypes.py_object,
++                                                      ctypes.py_object)),
++            ('FontFace_Type', ctypes.py_object),
++            ('ToyFontFace_Type', ctypes.py_object),
++            ('FontFace_FromFontFace', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('FontOptions_Type', ctypes.py_object),
++            ('FontOptions_FromFontOptions', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('Matrix_Type', ctypes.py_object),
++            ('Matrix_FromMatrix', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('Path_Type', ctypes.py_object),
++            ('Path_FromPath', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('Pattern_Type', ctypes.py_object),
++            ('SolidPattern_Type', ctypes.py_object),
++            ('SurfacePattern_Type', ctypes.py_object),
++            ('Gradient_Type', ctypes.py_object),
++            ('LinearGradient_Type', ctypes.py_object),
++            ('RadialGradient_Type', ctypes.py_object),
++            ('Pattern_FromPattern', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p,
++                                                      ctypes.py_object)), #** changed in 1.8.4
++            ('ScaledFont_Type', ctypes.py_object),
++            ('ScaledFont_FromScaledFont', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('Surface_Type', ctypes.py_object),
++            ('ImageSurface_Type', ctypes.py_object),
++            ('PDFSurface_Type', ctypes.py_object),
++            ('PSSurface_Type', ctypes.py_object),
++            ('SVGSurface_Type', ctypes.py_object),
++            ('Win32Surface_Type', ctypes.py_object),
++            ('Win32PrintingSurface_Type', ctypes.py_object),  #** new
++            ('XCBSurface_Type', ctypes.py_object),            #** new
++            ('XlibSurface_Type', ctypes.py_object),
++            ('Surface_FromSurface', ctypes.PYFUNCTYPE(ctypes.py_object,
++                                                      ctypes.c_void_p,
++                                                      ctypes.py_object)),
++            ('Check_Status', ctypes.PYFUNCTYPE(ctypes.c_int, ctypes.c_int)),
++            ('RectangleInt_Type', ctypes.py_object),
++            ('RectangleInt_FromRectangleInt', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('Region_Type', ctypes.py_object),
++            ('Region_FromRegion', ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p)),
++            ('RecordingSurface_Type', ctypes.py_object)]
++
+ 
+ def _loadPycairoAPI():
+     global pycairoAPI
+-- 
+2.14.3
+

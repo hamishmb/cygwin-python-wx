@@ -1,0 +1,16 @@
+diff -up wxPython-src-3.0.2.0/wxPython/wx/lib/mixins/listctrl.py.editzeroheight wxPython-src-3.0.2.0/wxPython/wx/lib/mixins/listctrl.py
+--- wxPython-src-3.0.2.0/wxPython/wx/lib/mixins/listctrl.py.editzeroheight	2014-10-13 18:37:52.000000000 -0400
++++ wxPython-src-3.0.2.0/wxPython/wx/lib/mixins/listctrl.py	2015-09-29 20:57:15.334780365 -0400
+@@ -604,7 +604,11 @@ class TextEditMixin:
+         y0 = self.GetItemRect(row)[1]
+         
+         editor = self.editor
+-        editor.SetDimensions(x0-scrolloffset,y0, x1,-1)
++        # Temp fix: for some reason on GTK3, setting the height as -1 (default)
++        # with the above code flow results in the height being zero.  Work
++        # around this by setting the height to the existing height.  Upstream
++        # bug reported: http://trac.wxwidgets.org/ticket/17160
++        editor.SetDimensions(x0-scrolloffset,y0, x1,editor.GetSize()[1])
+         
+         editor.SetValue(self.GetItem(row, col).GetText()) 
+         editor.Show()

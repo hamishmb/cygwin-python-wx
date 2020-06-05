@@ -4,7 +4,7 @@ inherit python2-distutils wxwidgets
 
 NAME="python-wx"
 VERSION=3.0.2.0
-RELEASE=4
+RELEASE=5
 CATEGORY="Python"
 SUMMARY="wxWidgets C++ application framework (Python bindings)"
 DESCRIPTION="wxWidgets is a set of libraries that allows C++ applications to
@@ -23,6 +23,8 @@ PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-plot.patch
 	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-listctrl-mixin-edit.patch
 	http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-webview-optional.patch
+    http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-fix-wxcairo.patch
+    http://pkgs.fedoraproject.org/cgit/rpms/wxPython.git/plain/wxPython-3.0.2.0-suppress-version-mismatch-warning.patch
 	3.0.2-python-build.patch
 "
 
@@ -41,6 +43,7 @@ python2_wx_CONTENTS="
 	${PYTHON2_SITELIB#/}/wxPython_common-${VERSION}-*.egg-info
 	usr/share/applications/
 	usr/share/icons/
+    usr/share/doc
 "
 python2_wxversion_OBSOLETES="python-wxversion"
 python2_wxversion_CONTENTS="

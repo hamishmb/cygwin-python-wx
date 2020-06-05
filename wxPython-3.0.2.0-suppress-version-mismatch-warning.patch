@@ -1,0 +1,44 @@
+Description: Suppress warning about RELEASE_VERSION mismatch
+ This will often be the case in Debian, since wxwidgets3.0 and wxpython3.0 are
+ separate source packages, and upstream releases of each happen on different
+ schedules.
+Author: Olly Betts <olly@survex.com>
+Forwarded: not-needed
+Last-Update: 2014-08-07
+
+--- a/wxPython/src/_core_ex.py
++++ b/wxPython/src/_core_ex.py
+@@ -26,9 +26,12 @@
+ 
+ assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWidgets version mismatch"
+ assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWidgets version mismatch"
+-if RELEASE_VERSION != _core_.RELEASE_VERSION:
+-    import warnings
+-    warnings.warn("wxPython/wxWidgets release number mismatch")
++# This will often be the case in Debian, since wxwidgets3.0 and wxpython3.0 are
++# separate source packages, and upstream releases of each happen on different
++# schedules.
++#if RELEASE_VERSION != _core_.RELEASE_VERSION:
++#    import warnings
++#    warnings.warn("wxPython/wxWidgets release number mismatch")
+ 
+ 
+ def version():
+--- a/wxPython/src/gtk/_core.py
++++ b/wxPython/src/gtk/_core.py
+@@ -16624,9 +16624,12 @@
+ 
+ assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWidgets version mismatch"
+ assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWidgets version mismatch"
+-if RELEASE_VERSION != _core_.RELEASE_VERSION:
+-    import warnings
+-    warnings.warn("wxPython/wxWidgets release number mismatch")
++# This will often be the case in Debian, since wxwidgets3.0 and wxpython3.0 are
++# separate source packages, and upstream releases of each happen on different
++# schedules.
++#if RELEASE_VERSION != _core_.RELEASE_VERSION:
++#    import warnings
++#    warnings.warn("wxPython/wxWidgets release number mismatch")
+ 
+ 
+ def version():
