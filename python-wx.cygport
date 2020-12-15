@@ -4,7 +4,7 @@ inherit python2-distutils wxwidgets
 
 NAME="python-wx"
 VERSION=3.0.2.0
-RELEASE=5
+RELEASE=6
 CATEGORY="Python"
 SUMMARY="wxWidgets C++ application framework (Python bindings)"
 DESCRIPTION="wxWidgets is a set of libraries that allows C++ applications to
@@ -59,6 +59,8 @@ DIFF_EXCLUDES="swigver.h wx.pth *_wrap.cpp"
 
 CFLAGS+=" -fno-strict-aliasing"
 CXXFLAGS+=" -fno-strict-aliasing"
+
+MAKE_OPTS="-j6"
 
 src_compile() {
 	lndirs
